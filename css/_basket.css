@@ -1,0 +1,27 @@
+.basket {
+  position: absolute;
+  width: calc(30% - 3rem);
+  top: 0;
+  right: 0;
+
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0px 10px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+
+.basket__item {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.3rem 0;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid lightgray;
+}
+
+.basket__header {
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid red;
+}
