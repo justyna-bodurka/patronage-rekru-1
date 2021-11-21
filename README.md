@@ -11,6 +11,8 @@ I was trying to follow conventional commits approach: https://www.conventionalco
 ## Remarks to project
 
 - due to not consistant image data, instead of using IMG tag with transformations, background-image has been used
+- as bundler is not available, css files are atomized and imported natively
+
 
 ## Available scripts
 
