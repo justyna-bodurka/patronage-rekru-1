@@ -1,8 +1,14 @@
-.products-list {
+.products__list {
   width: 70%;
   display: grid;
   grid-template-columns: 2fr 2fr;
   grid-gap: 1rem;
+}
+
+.products__list--center {
+  width: 40%;
+  margin-left: 30%;
+  grid-template-columns: 1fr;
 }
 
 .product {
@@ -10,7 +16,6 @@
   box-shadow: 0px 10px 16px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
-
   display: flex;
 }
 
@@ -24,7 +29,8 @@
 }
 
 .product__ingredients {
-    height: 40px;
+  height: 80px;
+  line-height: 1.5rem;
 }
 
 .product__desc {
@@ -32,3 +38,12 @@
   padding: 1rem;
 }
 
+.product__title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  padding-bottom: 1rem;
+}
+
+.product__price {
+  padding-bottom: 1rem;
+}
