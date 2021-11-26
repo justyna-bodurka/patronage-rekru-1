@@ -1,14 +1,21 @@
-let BASKET = [];
-let PRODUCTS_LIST = [];
+/*******************************
+ * ASYNC FETCH
+*******************************/
 
-fetch(
-  "https://raw.githubusercontent.com/alexsimkovich/patronage/main/api/data.json"
-)
+// Fetch data and initailize application or handle error
+function appStart () {
+  fetch("https://raw.githubusercontent.com/alexsimkovich/patronage/main/api/data.json")
   .then((resp) => resp.json())
-  .then((resp) => initialize(resp))
+  .then((resp) => renderApp(resp))
   .catch(() => renderErrorMessage());
+}
 
-function initialize(array) {
+/*******************************
+ * RENDERS
+*******************************/
+
+// Render fetched products and add click listeners
+function renderApp(array) {
   PRODUCTS_LIST = array;
 
   renderProducts();
@@ -16,45 +23,117 @@ function initialize(array) {
   addLayoutChangeListeners();
 }
 
-function addProductListeners() {
-  const buttons = document.querySelectorAll(".product .button");
-  buttons.forEach((button) => button.addEventListener("click", addToBasket));
-}
-
+// Render products
 function renderProducts() {
-  console.log(PRODUCTS_LIST);
   PRODUCTS_LIST.forEach((element) => {
     const list = document.querySelector(".products__list");
 
     list.insertAdjacentHTML(
       "beforeend",
-      `
-      <div class="product">
-        <div  class="product__image" style="background-image: url('${
-          element.image
-        }');"></div>
+      `<div class="product">
+        <div  class="product__image" style="background-image: url('${element.image}');"></div>
         <div class="product__desc">
           <div class="product__title">${element.title}</div>
           <div class="product__price">${element.price.toFixed(2)} zł</div>
-          <div class="product__ingredients">${element.ingredients.join(
-            ", "
-          )}</div>
-
-          <button class="button button--green" data-product-id="${
-            element.id
-          }">zamów</button>
+          <div class="product__ingredients">${element.ingredients.join(", ")}</div>
+          <button class="button button--green" data-product-id="${element.id}">zamów</button>
       </div>
     </div> `
     );
   });
 }
 
+// Render Basket and add basket items listeneres
+function renderBasket() {
+  const basketList = document.querySelector(".basket__list");
+  basketList.innerHTML = "";
+
+  BASKET.forEach((product) => {
+    basketList.insertAdjacentHTML(
+      "beforeend",
+      `<div class="basket__item">
+        <div class="basket__item-name">${product.title}</div>
+        <div class="basket__item-price">${product.price.toFixed(2)}</div>
+        <div class="basket__item-quantity">${product.quantity}</div>
+        <div class="basket__item-options"><button class="button button--red" data-basket-id="${product.id}">usuń</button></div>
+      </div>`
+    );
+  });
+
+  renderBasketSum()
+  handleBasketState()
+  addBasketListeners();
+}
+
+// Handle visibility of basket layout on empty/not-empty state
+function handleBasketState () {
+  const basketEmpty = document.querySelector(".bakset__empty");
+  const basketFooter = document.querySelector(".basket__footer");
+  
+  if (BASKET.length) {
+    basketFooter.removeAttribute("hidden");
+    basketEmpty.setAttribute("hidden", "true");
+  } else {
+    basketEmpty.removeAttribute("hidden");
+    basketFooter.setAttribute("hidden", "true");
+  }
+}
+
+// Render summary price of all products in basket
+function renderBasketSum () {
+  const basketFooterPrice = document.querySelector(".basket__footer-price");
+  let sum = 0;
+
+  BASKET.forEach((product) => { sum = sum + product.price * product.quantity; });
+  
+  basketFooterPrice.innerHTML = `${sum.toFixed(2)} zł`
+}
+
+/*******************************
+ * LISTENERS
+*******************************/
+
+// Add removeProduct listeners to basket items
+function addBasketListeners() {
+  const buttonsRemove = document.querySelectorAll(".button--red");
+  buttonsRemove.forEach((button) =>
+    button.addEventListener("click", removeFromBasket)
+  );
+}
+
+// Add listener for layout change button
+function addLayoutChangeListeners() {
+  const button = document.querySelector(".button--vintage");
+  const productsList = document.querySelector(".products__list");
+
+  button.addEventListener("click", () => productsList.classList.toggle("products__list--center"));
+}
+
+// Add click listeners to products
+function addProductListeners() {
+  const buttons = document.querySelectorAll(".product .button");
+  buttons.forEach((button) => button.addEventListener("click", addToBasket));
+}
+
+// Render error message and hide basket on error
+function renderErrorMessage() {
+  const errorMessage = document.querySelector(".error");
+  const basket = document.querySelector(".basket");
+
+  errorMessage.removeAttribute("hidden");  
+  basket.setAttribute("hidden", "true");
+}
+
+/*******************************
+ * EVENT HANDLERS
+*******************************/
+
+// Add to basket triggered on click event
 function addToBasket(e) {
-  console.log(e.target);
   const productId = parseInt(e.target.getAttribute("data-product-id"));
   const product = PRODUCTS_LIST.find((el) => el.id === productId);
 
-  if (!product) return alert("coś poszło nie tak");
+  if (!product) return alert("Coś poszło nie tak :-)");
 
   const productInBasket = BASKET.find((el) => el.id === productId);
 
@@ -72,52 +151,7 @@ function addToBasket(e) {
   renderBasket();
 }
 
-function renderBasket() {
-  const basketList = document.querySelector(".basket__list");
-  basketList.innerHTML = "";
-
-  BASKET.forEach((product) => {
-    basketList.insertAdjacentHTML(
-      "beforeend",
-      `<div class="basket__item">
-    <div class="basket__item-name">${product.title}</div>
-    <div class="basket__item-price">${product.price.toFixed(2)}</div>
-    <div class="basket__item-quantity">${product.quantity}</div>
-    <div class="basket__item-options"><button class="button button--red" data-basket-id="${
-      product.id
-    }">usuń</button></div>
-  </div>`
-    );
-  });
-
-  let sum = 0;
-  BASKET.forEach((product) => {
-    sum = sum + product.price * product.quantity;
-  });
-
-  basketFooterPrice = document.querySelector(".basket__footer-price");
-  basketFooterPrice.innerHTML = `${sum.toFixed(2)} zł`;
-
-  const basketEmpty = document.querySelector(".bakset__empty");
-  const basketFooter = document.querySelector(".basket__footer");
-  if (BASKET.length) {
-    basketFooter.removeAttribute("hidden");
-    basketEmpty.setAttribute("hidden", "true");
-  } else {
-    basketEmpty.removeAttribute("hidden");
-    basketFooter.setAttribute("hidden", "true");
-  }
-
-  addBasketListeners();
-}
-
-function addBasketListeners() {
-  const buttonsRemove = document.querySelectorAll(".button--red");
-  buttonsRemove.forEach((button) =>
-    button.addEventListener("click", removeFromBasket)
-  );
-}
-
+// Remove from basket function triggered on click event
 function removeFromBasket(e) {
   const productId = parseInt(e.target.getAttribute("data-basket-id"));
   const productInBasket = BASKET.find((el) => el.id === productId);
@@ -131,20 +165,11 @@ function removeFromBasket(e) {
   renderBasket();
 }
 
-function addLayoutChangeListeners() {
-  const buttonNav = document.querySelector(".button--vintage");
+/*******************************
+ * CODE EXECUTE
+*******************************/
 
-  buttonNav.addEventListener("click", () => {
-    const nav = document.querySelector(".products__list");
-    nav.classList.toggle("products__list--center");
-  });
-}
+let BASKET = [];
+let PRODUCTS_LIST = [];
 
-function renderErrorMessage() {
-  const errorMessage = document.querySelector(".products__list-error");
-  errorMessage.removeAttribute("hidden");
-  errorMessage.innerHTML =
-    "Problem techniczny. <br>Jeśli chcesz zamówić pizzę zadzwoń do nas:<br> 500 700 700.";
-  const basket = document.querySelector(".basket");
-  basket.setAttribute("hidden", "true");
-}
+appStart();

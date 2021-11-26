@@ -34,6 +34,19 @@ main {
   width: initial;
 }
 
+.error {
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 2rem;
+  text-align: center;
+  padding: 3rem 0;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0px 10px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  width: 50%;
+  margin: 50px auto 0;
+}
 
     
 

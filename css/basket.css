@@ -33,7 +33,7 @@
 
 .basket__list {
   max-height: calc(100vh - 294px);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .basket__footer-content {
