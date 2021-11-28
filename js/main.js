@@ -15,8 +15,8 @@ function appStart () {
 *******************************/
 
 // Render fetched products and add click listeners
-function renderApp(array) {
-  PRODUCTS_LIST = array;
+function renderApp(productsList) {
+  PRODUCTS_LIST = productsList;
 
   renderProducts();
   addProductListeners();
@@ -31,12 +31,16 @@ function renderProducts() {
     list.insertAdjacentHTML(
       "beforeend",
       `<div class="product">
-        <div  class="product__image" style="background-image: url('${element.image}');"></div>
+        <div  class="product__image"> <img
+        
+        src='${element.image}'
+        alt="">
+      </div>
         <div class="product__desc">
           <div class="product__title">${element.title}</div>
           <div class="product__price">${element.price.toFixed(2)} zł</div>
           <div class="product__ingredients">${element.ingredients.join(", ")}</div>
-          <button class="button button--green" data-product-id="${element.id}">zamów</button>
+          <button class="button button--add" data-product-id="${element.id}">zamów</button>
       </div>
     </div> `
     );
@@ -55,7 +59,7 @@ function renderBasket() {
         <div class="basket__item-name">${product.title}</div>
         <div class="basket__item-price">${product.price.toFixed(2)}</div>
         <div class="basket__item-quantity">${product.quantity}</div>
-        <div class="basket__item-options"><button class="button button--red" data-basket-id="${product.id}">usuń</button></div>
+        <div class="basket__item-options"><button class="button button--remove" data-basket-id="${product.id}">usuń</button></div>
       </div>`
     );
   });
@@ -67,15 +71,12 @@ function renderBasket() {
 
 // Handle visibility of basket layout on empty/not-empty state
 function handleBasketState () {
-  const basketEmpty = document.querySelector(".bakset__empty");
-  const basketFooter = document.querySelector(".basket__footer");
-  
+  const basketElement = document.querySelector('.basket')
+
   if (BASKET.length) {
-    basketFooter.removeAttribute("hidden");
-    basketEmpty.setAttribute("hidden", "true");
+    basketElement.classList.remove('basket--empty')
   } else {
-    basketEmpty.removeAttribute("hidden");
-    basketFooter.setAttribute("hidden", "true");
+    basketElement.classList.add('basket--empty')
   }
 }
 
@@ -86,7 +87,7 @@ function renderBasketSum () {
 
   BASKET.forEach((product) => { sum = sum + product.price * product.quantity; });
   
-  basketFooterPrice.innerHTML = `${sum.toFixed(2)} zł`
+  basketFooterPrice.textContent= `${sum.toFixed(2)} zł`
 }
 
 /*******************************
@@ -95,7 +96,7 @@ function renderBasketSum () {
 
 // Add removeProduct listeners to basket items
 function addBasketListeners() {
-  const buttonsRemove = document.querySelectorAll(".button--red");
+  const buttonsRemove = document.querySelectorAll(".basket .button--remove");
   buttonsRemove.forEach((button) =>
     button.addEventListener("click", removeFromBasket)
   );
@@ -103,7 +104,7 @@ function addBasketListeners() {
 
 // Add listener for layout change button
 function addLayoutChangeListeners() {
-  const button = document.querySelector(".button--vintage");
+  const button = document.querySelector(".button--change");
   const productsList = document.querySelector(".products__list");
 
   button.addEventListener("click", () => productsList.classList.toggle("products__list--center"));
@@ -131,12 +132,12 @@ function renderErrorMessage() {
 // Add to basket triggered on click event
 function addToBasket(e) {
   const productId = parseInt(e.target.getAttribute("data-product-id"));
-  const product = PRODUCTS_LIST.find((el) => el.id === productId);
+  const product = isProductInList(PRODUCTS_LIST, productId);
 
   if (!product) return alert("Coś poszło nie tak :-)");
 
-  const productInBasket = BASKET.find((el) => el.id === productId);
-
+  const productInBasket = isProductInList(BASKET, productId);
+ 
   if (productInBasket) {
     productInBasket.quantity++;
   } else {
@@ -151,6 +152,10 @@ function addToBasket(e) {
   renderBasket();
 }
 
+function isProductInList (list, productId) {
+  return list.find((el) => el.id === productId)
+}
+
 // Remove from basket function triggered on click event
 function removeFromBasket(e) {
   const productId = parseInt(e.target.getAttribute("data-basket-id"));
@@ -161,7 +166,7 @@ function removeFromBasket(e) {
   } else {
     BASKET = BASKET.filter((el) => el.id !== productInBasket.id);
   }
-
+  
   renderBasket();
 }
 

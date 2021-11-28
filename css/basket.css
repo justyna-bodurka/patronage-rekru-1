@@ -48,3 +48,15 @@
   font-size: 1.5rem;
   font-weight: 800;
 }
+
+.basket .basket__empty-text {
+  display: none;
+}
+
+.basket.basket--empty .basket__footer {
+  display: none;
+}
+
+.basket.basket--empty .basket__empty-text {
+  display: block;
+}

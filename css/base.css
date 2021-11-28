@@ -19,19 +19,21 @@ main {
   padding: 0.4rem 0.6rem;
 }
 
-.button--green {
+.button--add {
   background: rgba(118, 184, 41, 1);
   border-bottom: 3px solid #319744;
 }
 
-.button--red {
+.button--remove {
   background: #ff3c3c;
   border-bottom: 3px solid #9e0d0d
 }
 
-.button--vintage {
+.button--change {
   font-family: 'Lobster';
   width: initial;
+  background: #ff3c3c;
+  border-bottom: 3px solid #9e0d0d
 }
 
 .error {

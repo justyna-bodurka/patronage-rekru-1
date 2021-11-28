@@ -27,7 +27,6 @@ I was trying to follow conventional commits approach: https://www.conventionalco
 
 ## Remarks to project
 
-- due to not consistant image data, instead of using IMG tag with transformations, background-image has been used
 - as bundler is not available, css files are atomized and imported natively by the browser
 - JavaScript modules was not used and all script code has been grouped
 - One of demands in the task was to make list in 'center' of the page. Two views was introduced into application using "zmień widok" button in header.
