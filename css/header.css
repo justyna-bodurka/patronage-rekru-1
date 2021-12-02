@@ -1,0 +1,23 @@
+@import url(https://fonts.googleapis.com/css?family=Lobster);
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 2rem 1rem;
+  background: url("../img/bg.jpg");
+}
+
+.logo {
+  font-family: "Lobster", cursive;
+  font-size: 3rem;
+  color: #fcedd8;
+  text-align: center;
+  transform: scale(1) rotate(-5deg) translateX(0px) translateY(0px) skewX(1deg) skewY(1deg);
+  text-shadow: 1px 1px #8c0000, 
+    2px 2px #8c0000, 3px 3px #8c0000,
+    4px 4px #8c0000, 5px 5px #8c0000, 
+    6px 6px #8c0000, 7px 7px #8c0000,
+    8px 8px #8c0000, 9px 9px #8c0000, 
+    10px 10px #8c0000;
+}

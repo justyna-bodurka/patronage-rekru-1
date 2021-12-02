@@ -1,0 +1,54 @@
+body {
+  background: rgba(253, 253, 252, 0.6);
+  font-size: 16px;
+  font-family: "Open Sans", sans-serif;
+}
+
+main {
+  position: relative;
+  margin: 1rem;
+}
+
+.button {
+  width: 100%;
+  color: #fff;
+  border: 0;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.button--add {
+  background: rgba(118, 184, 41, 1);
+  border-bottom: 3px solid #319744;
+}
+
+.button--remove {
+  background: #ff3c3c;
+  border-bottom: 3px solid #9e0d0d
+}
+
+.button--change {
+  font-family: 'Lobster';
+  width: initial;
+  background: #ff3c3c;
+  border-bottom: 3px solid #9e0d0d
+}
+
+.error {
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 2rem;
+  text-align: center;
+  padding: 3rem 0;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0px 10px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  width: 50%;
+  margin: 50px auto 0;
+}
+
+    
+
