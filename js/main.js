@@ -1,18 +1,20 @@
 /*******************************
  * ASYNC FETCH
-*******************************/
+ *******************************/
 
 // Fetch data and initailize application or handle error
-function appStart () {
-  fetch("https://raw.githubusercontent.com/alexsimkovich/patronage/main/api/data.json")
-  .then((resp) => resp.json())
-  .then((resp) => renderApp(resp))
-  .catch(() => renderErrorMessage());
+function appStart() {
+  fetch(
+    "https://raw.githubusercontent.com/alexsimkovich/patronage/main/api/data.json"
+  )
+    .then((resp) => resp.json())
+    .then((resp) => renderApp(resp))
+    .catch(() => renderErrorMessage());
 }
 
 /*******************************
  * RENDERS
-*******************************/
+ *******************************/
 
 // Render fetched products and add click listeners
 function renderApp(productsList) {
@@ -21,6 +23,17 @@ function renderApp(productsList) {
   renderProducts();
   addProductListeners();
   addLayoutChangeListeners();
+
+  const basketMobile = document.querySelector(".basket__mobile");
+
+  const basket = document.querySelector(".basket");
+  basketMobile.addEventListener("click", () =>
+    basket.classList.add("basket--open")
+  );
+  const buttonMobile = document.querySelector(".button-mobile");
+  buttonMobile.addEventListener("click", () =>
+    basket.classList.remove("basket--open")
+  );
 }
 
 // Render products
@@ -39,8 +52,12 @@ function renderProducts() {
         <div class="product__desc">
           <div class="product__title">${element.title}</div>
           <div class="product__price">${element.price.toFixed(2)} zł</div>
-          <div class="product__ingredients">${element.ingredients.join(", ")}</div>
-          <button class="button button--add" data-product-id="${element.id}">zamów</button>
+          <div class="product__ingredients">${element.ingredients.join(
+            ", "
+          )}</div>
+          <button class="button button--add" data-product-id="${
+            element.id
+          }">zamów</button>
       </div>
     </div> `
     );
@@ -59,40 +76,61 @@ function renderBasket() {
         <div class="basket__item-name">${product.title}</div>
         <div class="basket__item-price">${product.price.toFixed(2)}</div>
         <div class="basket__item-quantity">${product.quantity}</div>
-        <div class="basket__item-options"><button class="button button--remove" data-basket-id="${product.id}">usuń</button></div>
+        <div class="basket__item-options"><button class="button button--remove" data-basket-id="${
+          product.id
+        }">usuń</button></div>
       </div>`
     );
   });
 
-  renderBasketSum()
-  handleBasketState()
+  renderBasketSum();
+  renderSmallBasketQuantity();
+  handleBasketState();
   addBasketListeners();
 }
 
 // Handle visibility of basket layout on empty/not-empty state
-function handleBasketState () {
-  const basketElement = document.querySelector('.basket')
+function handleBasketState() {
+  const basketElement = document.querySelector(".basket");
 
   if (BASKET.length) {
-    basketElement.classList.remove('basket--empty')
+    basketElement.classList.remove("basket--empty");
   } else {
-    basketElement.classList.add('basket--empty')
+    basketElement.classList.add("basket--empty");
   }
 }
 
 // Render summary price of all products in basket
-function renderBasketSum () {
+function renderBasketSum() {
   const basketFooterPrice = document.querySelector(".basket__footer-price");
   let sum = 0;
 
-  BASKET.forEach((product) => { sum = sum + product.price * product.quantity; });
-  
-  basketFooterPrice.textContent= `${sum.toFixed(2)} zł`
+  BASKET.forEach((product) => {
+    sum = sum + product.price * product.quantity;
+  });
+
+  basketFooterPrice.textContent = `${sum.toFixed(2)} zł`;
+
+  const basketMobilePrice = document.querySelector(".basket__mobile-price");
+  basketMobilePrice.textContent = `${sum.toFixed(2)} zł`;
+}
+
+function renderSmallBasketQuantity() {
+  const basketMobileQuantity = document.querySelector(
+    ".basket__mobile-quantity"
+  );
+  let quantity = 0;
+
+  BASKET.forEach((product) => {
+    quantity += product.quantity;
+  });
+
+  basketMobileQuantity.textContent = `${quantity} szt.`;
 }
 
 /*******************************
  * LISTENERS
-*******************************/
+ *******************************/
 
 // Add removeProduct listeners to basket items
 function addBasketListeners() {
@@ -107,7 +145,9 @@ function addLayoutChangeListeners() {
   const button = document.querySelector(".button--change");
   const productsList = document.querySelector(".products__list");
 
-  button.addEventListener("click", () => productsList.classList.toggle("products__list--center"));
+  button.addEventListener("click", () =>
+    productsList.classList.toggle("products__list--center")
+  );
 }
 
 // Add click listeners to products
@@ -121,13 +161,13 @@ function renderErrorMessage() {
   const errorMessage = document.querySelector(".error");
   const basket = document.querySelector(".basket");
 
-  errorMessage.removeAttribute("hidden");  
+  errorMessage.removeAttribute("hidden");
   basket.setAttribute("hidden", "true");
 }
 
 /*******************************
  * EVENT HANDLERS
-*******************************/
+ *******************************/
 
 // Add to basket triggered on click event
 function addToBasket(e) {
@@ -137,7 +177,7 @@ function addToBasket(e) {
   if (!product) return alert("Coś poszło nie tak :-)");
 
   const productInBasket = isProductInList(BASKET, productId);
- 
+
   if (productInBasket) {
     productInBasket.quantity++;
   } else {
@@ -152,8 +192,8 @@ function addToBasket(e) {
   renderBasket();
 }
 
-function isProductInList (list, productId) {
-  return list.find((el) => el.id === productId)
+function isProductInList(list, productId) {
+  return list.find((el) => el.id === productId);
 }
 
 // Remove from basket function triggered on click event
@@ -166,13 +206,17 @@ function removeFromBasket(e) {
   } else {
     BASKET = BASKET.filter((el) => el.id !== productInBasket.id);
   }
-  
+
   renderBasket();
 }
+// const buttonMim = document.querySelector(".button-min");
+
+// const basketMin = document.querySelector(".basket-min");
+// basketMin.textContent = `${sum.toFixed(2)} zł`;
 
 /*******************************
  * CODE EXECUTE
-*******************************/
+ *******************************/
 
 let BASKET = [];
 let PRODUCTS_LIST = [];

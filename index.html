@@ -8,22 +8,34 @@
     <link href="css/main.css" rel="stylesheet" />
   </head>
   <body>
+    
     <header>
         <div class="logo">Pizza Intive</div>
         <button class="button button--change">zmień widok</button>
       </div>
     </header>
     <main>
+     
       <div class="error" hidden>
         Problem techniczny. <br>Jeśli chcesz zamówić pizzę zadzwoń do nas:<br> 500 700 700.
       </div>
 
       <div class="products__list products__list--center"></div>
 
+      
+      
+      <div class="basket__mobile">
+        <span class="basket__mobile-price"></span>
+        
+        <span class="basket__mobile-quantity"></span>
+        <span><img src="img/basket.png" style="max-width: 48px;"></span>
+      </div>
+      
+      
       <div class="basket basket--empty">
-        <div class="basket__header"> Moje zamówienie</div>
+        <div class="basket__header"> Moje zamówienie  <button class="button-mobile">X</button></div>
         <div class="basket__empty-text">Głodny? Zamów pizzę!</div>
-        <div class="basket__list"></div>
+        <div class="basket__list "></div>
         <div class="basket__footer">
           <div class="basket__footer-content">
             <span>Suma: </span>

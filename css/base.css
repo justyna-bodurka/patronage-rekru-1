@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 body {
   background: rgba(253, 253, 252, 0.6);
   font-size: 16px;
@@ -5,7 +8,7 @@ body {
 }
 
 main {
-  position: relative;
+  /* position: relative; */
   margin: 1rem;
 }
 
@@ -26,14 +29,16 @@ main {
 
 .button--remove {
   background: #ff3c3c;
-  border-bottom: 3px solid #9e0d0d
+  border-bottom: 3px solid #9e0d0d;
 }
 
 .button--change {
-  font-family: 'Lobster';
-  width: initial;
-  background: #ff3c3c;
-  border-bottom: 3px solid #9e0d0d
+  display: none;
+}
+.button-mobile {
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .error {
@@ -50,5 +55,12 @@ main {
   margin: 50px auto 0;
 }
 
-    
-
+@media (min-width: 1024px) {
+  .button--change {
+    display: block;
+    font-family: "Lobster";
+    width: initial;
+    background: #ff3c3c;
+    border-bottom: 3px solid #9e0d0d;
+  }
+}
