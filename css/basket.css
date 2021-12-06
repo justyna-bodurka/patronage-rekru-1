@@ -1,6 +1,9 @@
 .basket {
   display: none;
 }
+.basket[hidden] {
+  display: none;
+}
 .basket--open {
   display: block;
   position: fixed;
