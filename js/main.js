@@ -33,40 +33,8 @@ function renderApp(productsList) {
   addLayoutChangeListeners();
   addsortCurrentListener();
 
-  // ===========
-  const input = document.querySelector(".search__item");
-  input.addEventListener("keyup", handleSearch);
-  // ===========
-
-  function handleSearch() {
-    CURRENT_PRODUCTS_LIST = PRODUCTS_LIST.filter(function (product) {
-      const typedIngredients = input.value
-        .split(",")
-        .map((el) => el.trim())
-        .filter((el) => el.length);
-
-      return typedIngredients.every((el) => product.ingredients.includes(el));
-    });
-    if (CURRENT_PRODUCTS_LIST.length) {
-      document.querySelector(".error").setAttribute("hidden", true);
-    } else {
-      renderErrorMessage("emptyError");
-    }
-    renderProducts();
-  }
-
-  // ===========
-
-  const basketMobile = document.querySelector(".basket__mobile");
-
-  const basket = document.querySelector(".basket");
-  basketMobile.addEventListener("click", () =>
-    basket.classList.add("basket--open")
-  );
-  const buttonMobile = document.querySelector(".button-mobile");
-  buttonMobile.addEventListener("click", () =>
-    basket.classList.remove("basket--open")
-  );
+  addSearchListeners();
+  addMobileBasketListeners();
 }
 
 // Render products
@@ -122,7 +90,8 @@ function renderBasket() {
   renderSmallBasketQuantity();
   handleBasketState();
   addBasketListeners();
-  clearBasketListener();
+  addClearBasketListener();
+  addMobileBasketListeners();
 }
 
 // Handle visibility of basket layout on empty/not-empty state
@@ -139,6 +108,7 @@ function handleBasketState() {
 // Render summary price of all products in basket
 function renderBasketSum() {
   const basketFooterPrice = document.querySelector(".basket__footer-price");
+  const basketMobilePrice = document.querySelector(".basket__mobile-price");
   let sum = 0;
 
   BASKET.forEach((product) => {
@@ -146,11 +116,24 @@ function renderBasketSum() {
   });
 
   basketFooterPrice.textContent = `${sum.toFixed(2)} zł`;
-
-  const basketMobilePrice = document.querySelector(".basket__mobile-price");
   basketMobilePrice.textContent = `${sum.toFixed(2)} zł`;
 }
 
+// Render error message and hide basket on error
+function renderErrorMessage(type) {
+  const errorMessage = document.querySelector(".error");
+  const basket = document.querySelector(".basket");
+  if (type === "emptyError") {
+    errorMessage.textContent = "Nie mamy produktu z wpisanymi składnikami";
+  }
+
+  if (type === "appError") {
+    errorMessage.removeAttribute("hidden");
+    basket.setAttribute("hidden", "true");
+  }
+}
+
+// Render small basket quantity
 function renderSmallBasketQuantity() {
   const basketMobileQuantity = document.querySelector(
     ".basket__mobile-quantity"
@@ -192,18 +175,10 @@ function addProductListeners() {
   buttons.forEach((button) => button.addEventListener("click", addToBasket));
 }
 
-// Render error message and hide basket on error
-function renderErrorMessage(type) {
-  const errorMessage = document.querySelector(".error");
-  const basket = document.querySelector(".basket");
-  if (type === "emptyError") {
-    errorMessage.textContent = "Nie mamy produktu z wpisanymi składnikami";
-  }
-
-  if (type === "appError") {
-    errorMessage.removeAttribute("hidden");
-    basket.setAttribute("hidden", "true");
-  }
+// Add listenser for searching ingredients
+function addSearchListeners() {
+  const input = document.querySelector(".search__item");
+  input.addEventListener("keyup", handleSearch);
 }
 
 // Add sorting dropdown listener
@@ -212,17 +187,31 @@ function addsortCurrentListener() {
 
   dropdown.addEventListener("change", renderProducts);
 }
-
-function clearBasketListener() {
+// Add clear basket listeners
+function addClearBasketListener() {
   const buttonClear = document.querySelector(".button--clear");
   buttonClear.addEventListener("click", clearBasket);
 }
-// filtrowanie
+//  Add listeners for mobile basket visibility !!!!!!!!!!!!!!!!!!!!!
+function addMobileBasketListeners() {
+  const basketMobile = document.querySelector(".basket__mobile");
+  const basket = document.querySelector(".basket");
+  const buttonMobile = document.querySelector(".button-mobile");
+
+  basketMobile.addEventListener("click", () =>
+    basket.classList.add("basket--open")
+  );
+
+  buttonMobile.addEventListener("click", () =>
+    basket.classList.remove("basket--open")
+  );
+}
 
 /*******************************
  * EVENT HANDLERS
  *******************************/
 
+// Clear basket triggered on click event
 function clearBasket() {
   BASKET = [];
   saveBasketInLocalStorage();
@@ -253,12 +242,12 @@ function addToBasket(e) {
 
   renderBasket();
 }
-// local storage
-
+// Save basket in localStorage function
 function saveBasketInLocalStorage() {
   console.log(JSON.stringify(BASKET));
   localStorage.setItem("userBasket", JSON.stringify(BASKET));
 }
+// Get basket from localStorage function
 function getBaskettFromLocalStorage() {
   console.log(localStorage.getItem("userBasket"));
   return JSON.parse(localStorage.getItem("userBasket"));
@@ -282,6 +271,7 @@ function removeFromBasket(e) {
   saveBasketInLocalStorage();
   renderBasket();
 }
+// Sorting products function
 function sortCurrentList() {
   const sorterElement = document.querySelector(".sort__array");
   const sorterValue = sorterElement.options[sorterElement.selectedIndex].value;
@@ -295,6 +285,23 @@ function sortCurrentList() {
   } else {
     CURRENT_PRODUCTS_LIST.sort((x, y) => x.title.localeCompare(y.title));
   }
+}
+// Ingredients search function
+function handleSearch() {
+  CURRENT_PRODUCTS_LIST = PRODUCTS_LIST.filter(function (product) {
+    const typedIngredients = input.value
+      .split(",")
+      .map((el) => el.trim())
+      .filter((el) => el.length);
+
+    return typedIngredients.every((el) => product.ingredients.includes(el));
+  });
+  if (CURRENT_PRODUCTS_LIST.length) {
+    document.querySelector(".error").setAttribute("hidden", true);
+  } else {
+    renderErrorMessage("emptyError");
+  }
+  renderProducts();
 }
 
 /*******************************
