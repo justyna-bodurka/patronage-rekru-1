@@ -43,9 +43,9 @@ main {
 .button--clear {
   background: #ff3c3c;
   border-bottom: 3px solid #9e0d0d;
+  margin: 0.5rem 0;
 }
 .search {
-  /* text-align: center; */
   padding: 0.5rem 0 1rem;
   width: 100%;
   font-size: 1rem;
@@ -53,14 +53,15 @@ main {
 .search__item {
   line-height: 1rem;
   padding: 0.5rem 1rem;
-  width: 70%;
+  width: 100%;
   border: 1px solid grey;
   border-radius: 0.3rem;
 }
 
 .dropdown {
-  width: 20%;
-  padding: 0 1rem 1rem;
+  /* width: 30%; */
+  text-align: right;
+  padding: 0.5rem 0;
 }
 .sort__array {
   border: 1px solid grey;
@@ -81,7 +82,7 @@ main {
   margin: 50px auto 0;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .button--change {
     display: block;
     font-family: "Lobster";
@@ -89,7 +90,16 @@ main {
     background: #ff3c3c;
     border-bottom: 3px solid #9e0d0d;
   }
+}
+@media (min-width: 1024px) {
   .button-mobile {
     display: none;
+  }
+  .search__item {
+    width: 70%;
+  }
+
+  .dropdown {
+    margin-right: 30%;
   }
 }

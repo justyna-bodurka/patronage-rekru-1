@@ -39,9 +39,10 @@ function renderApp(productsList) {
 
 // Render products
 function renderProducts() {
-  sortCurrentList();
   const list = document.querySelector(".products__list");
+
   list.innerHTML = "";
+  sortCurrentList();
 
   CURRENT_PRODUCTS_LIST.forEach((element) => {
     list.insertAdjacentHTML(
@@ -65,6 +66,8 @@ function renderProducts() {
     </div> `
     );
   });
+
+  addProductListeners();
 }
 
 // Render Basket and add basket items listeneres
@@ -87,10 +90,11 @@ function renderBasket() {
   });
 
   renderBasketSum();
-  renderSmallBasketQuantity();
   handleBasketState();
   addBasketListeners();
   addClearBasketListener();
+
+  renderSmallBasketQuantity();
   addMobileBasketListeners();
 }
 
@@ -123,14 +127,16 @@ function renderBasketSum() {
 function renderErrorMessage(type) {
   const errorMessage = document.querySelector(".error");
   const basket = document.querySelector(".basket");
+
   if (type === "emptyError") {
     errorMessage.textContent = "Nie mamy produktu z wpisanymi składnikami";
   }
 
   if (type === "appError") {
-    errorMessage.removeAttribute("hidden");
     basket.setAttribute("hidden", "true");
   }
+
+  errorMessage.removeAttribute("hidden");
 }
 
 // Render small basket quantity
@@ -154,6 +160,7 @@ function renderSmallBasketQuantity() {
 // Add removeProduct listeners to basket items
 function addBasketListeners() {
   const buttonsRemove = document.querySelectorAll(".basket .button--remove");
+
   buttonsRemove.forEach((button) =>
     button.addEventListener("click", removeFromBasket)
   );
@@ -184,25 +191,26 @@ function addSearchListeners() {
 // Add sorting dropdown listener
 function addsortCurrentListener() {
   const dropdown = document.querySelector(".sort__array");
-
   dropdown.addEventListener("change", renderProducts);
 }
+
 // Add clear basket listeners
 function addClearBasketListener() {
   const buttonClear = document.querySelector(".button--clear");
   buttonClear.addEventListener("click", clearBasket);
 }
+
 //  Add listeners for mobile basket visibility !!!!!!!!!!!!!!!!!!!!!
 function addMobileBasketListeners() {
-  const basketMobile = document.querySelector(".basket__mobile");
   const basket = document.querySelector(".basket");
-  const buttonMobile = document.querySelector(".button-mobile");
+  const basketMobile = document.querySelector(".basket__mobile");
+  const closeMobileBasketButton = document.querySelector(".button-mobile");
 
   basketMobile.addEventListener("click", () =>
     basket.classList.add("basket--open")
   );
 
-  buttonMobile.addEventListener("click", () =>
+  closeMobileBasketButton.addEventListener("click", () =>
     basket.classList.remove("basket--open")
   );
 }
@@ -239,22 +247,7 @@ function addToBasket(e) {
   }
 
   saveBasketInLocalStorage();
-
   renderBasket();
-}
-// Save basket in localStorage function
-function saveBasketInLocalStorage() {
-  console.log(JSON.stringify(BASKET));
-  localStorage.setItem("userBasket", JSON.stringify(BASKET));
-}
-// Get basket from localStorage function
-function getBaskettFromLocalStorage() {
-  console.log(localStorage.getItem("userBasket"));
-  return JSON.parse(localStorage.getItem("userBasket"));
-}
-
-function isProductInList(list, productId) {
-  return list.find((el) => el.id === productId);
 }
 
 // Remove from basket function triggered on click event
@@ -271,7 +264,8 @@ function removeFromBasket(e) {
   saveBasketInLocalStorage();
   renderBasket();
 }
-// Sorting products function
+
+// Sorting products
 function sortCurrentList() {
   const sorterElement = document.querySelector(".sort__array");
   const sorterValue = sorterElement.options[sorterElement.selectedIndex].value;
@@ -286,22 +280,48 @@ function sortCurrentList() {
     CURRENT_PRODUCTS_LIST.sort((x, y) => x.title.localeCompare(y.title));
   }
 }
-// Ingredients search function
+
+// Ingredients search
 function handleSearch() {
+  const input = document.querySelector(".search__item");
+
   CURRENT_PRODUCTS_LIST = PRODUCTS_LIST.filter(function (product) {
     const typedIngredients = input.value
       .split(",")
       .map((el) => el.trim())
       .filter((el) => el.length);
 
-    return typedIngredients.every((el) => product.ingredients.includes(el));
+    return typedIngredients.every((el) =>
+      product.ingredients.join("").includes(el)
+    );
   });
+
   if (CURRENT_PRODUCTS_LIST.length) {
     document.querySelector(".error").setAttribute("hidden", true);
   } else {
     renderErrorMessage("emptyError");
   }
+
   renderProducts();
+}
+
+/*******************************
+ * UTILITY FUNCTIONS
+ *******************************/
+
+// Save basket in localStorage function
+function saveBasketInLocalStorage() {
+  localStorage.setItem("userBasket", JSON.stringify(BASKET));
+}
+
+// Get basket from localStorage
+function getBaskettFromLocalStorage() {
+  return JSON.parse(localStorage.getItem("userBasket"));
+}
+
+// Check if product with selected id exist in provided list
+function isProductInList(list, productId) {
+  return list.find((el) => el.id === productId);
 }
 
 /*******************************
@@ -309,7 +329,6 @@ function handleSearch() {
  *******************************/
 
 let BASKET = getBaskettFromLocalStorage() || [];
-// let BASKET = [];
 let PRODUCTS_LIST = [];
 let CURRENT_PRODUCTS_LIST = [];
 
