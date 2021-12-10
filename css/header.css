@@ -20,3 +20,33 @@ header {
     4px 4px #8c0000, 5px 5px #8c0000, 6px 6px #8c0000, 7px 7px #8c0000,
     8px 8px #8c0000, 9px 9px #8c0000, 10px 10px #8c0000;
 }
+.search {
+  padding: 0.5rem 0 1rem;
+  width: 100%;
+  font-size: 1rem;
+}
+.search__item {
+  line-height: 1rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border: 1px solid grey;
+  border-radius: 0.3rem;
+}
+
+.dropdown {
+  text-align: right;
+  padding: 0.5rem 0;
+}
+.sort__array {
+  border: 1px solid grey;
+  border-radius: 0.3rem;
+}
+
+@media (min-width: 1024px) {
+  .search__item {
+    width: 70%;
+  }
+  .dropdown {
+    margin-right: 30%;
+  }
+}

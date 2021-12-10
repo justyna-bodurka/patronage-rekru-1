@@ -31,7 +31,7 @@ function renderApp(productsList) {
 
   addProductListeners();
   addLayoutChangeListeners();
-  addsortCurrentListener();
+  addSortCurrentListener();
 
   addSearchListeners();
   addMobileBasketListeners();
@@ -189,7 +189,7 @@ function addSearchListeners() {
 }
 
 // Add sorting dropdown listener
-function addsortCurrentListener() {
+function addSortCurrentListener() {
   const dropdown = document.querySelector(".sort__array");
   dropdown.addEventListener("change", renderProducts);
 }
@@ -200,7 +200,7 @@ function addClearBasketListener() {
   buttonClear.addEventListener("click", clearBasket);
 }
 
-//  Add listeners for mobile basket visibility !!!!!!!!!!!!!!!!!!!!!
+//  Add listeners for mobile basket visibility
 function addMobileBasketListeners() {
   const basket = document.querySelector(".basket");
   const basketMobile = document.querySelector(".basket__mobile");
@@ -270,23 +270,29 @@ function sortCurrentList() {
   const sorterElement = document.querySelector(".sort__array");
   const sorterValue = sorterElement.options[sorterElement.selectedIndex].value;
 
-  if (sorterValue === "z-a") {
-    CURRENT_PRODUCTS_LIST.sort((x, y) => y.title.localeCompare(x.title));
-  } else if (sorterValue === "cena rosnąco") {
-    CURRENT_PRODUCTS_LIST.sort((x, y) => parseInt(x.price) - parseInt(y.price));
-  } else if (sorterValue === "cena malejąco") {
-    CURRENT_PRODUCTS_LIST.sort((x, y) => parseInt(y.price) - parseInt(x.price));
-  } else {
-    CURRENT_PRODUCTS_LIST.sort((x, y) => x.title.localeCompare(y.title));
+  switch (sorterValue) {
+    case "z-a":
+      CURRENT_PRODUCTS_LIST.sort((x, y) => y.title.localeCompare(x.title));
+      break;
+    case "cena rosnąco":
+      CURRENT_PRODUCTS_LIST.sort(
+        (x, y) => parseInt(x.price) - parseInt(y.price)
+      );
+      break;
+    case "cena malejąco":
+      CURRENT_PRODUCTS_LIST.sort(
+        (x, y) => parseInt(y.price) - parseInt(x.price)
+      );
+      break;
+    default:
+      CURRENT_PRODUCTS_LIST.sort((x, y) => x.title.localeCompare(y.title));
   }
 }
 
 // Ingredients search
-function handleSearch() {
-  const input = document.querySelector(".search__item");
-
+function handleSearch(e) {
   CURRENT_PRODUCTS_LIST = PRODUCTS_LIST.filter(function (product) {
-    const typedIngredients = input.value
+    const typedIngredients = e.target.value
       .split(",")
       .map((el) => el.trim())
       .filter((el) => el.length);
