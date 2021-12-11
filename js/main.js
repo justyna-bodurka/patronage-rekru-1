@@ -42,7 +42,6 @@ function renderProducts() {
   const list = document.querySelector(".products__list");
 
   list.innerHTML = "";
-  sortCurrentList();
 
   CURRENT_PRODUCTS_LIST.forEach((element) => {
     list.insertAdjacentHTML(
@@ -191,7 +190,7 @@ function addSearchListeners() {
 // Add sorting dropdown listener
 function addSortCurrentListener() {
   const dropdown = document.querySelector(".sort__array");
-  dropdown.addEventListener("change", renderProducts);
+  dropdown.addEventListener("change", sortCurrentList);
 }
 
 // Add clear basket listeners
@@ -269,23 +268,26 @@ function removeFromBasket(e) {
 function sortCurrentList() {
   const sorterElement = document.querySelector(".sort__array");
   const sorterValue = sorterElement.options[sorterElement.selectedIndex].value;
-
   switch (sorterValue) {
     case "z-a":
       CURRENT_PRODUCTS_LIST.sort((x, y) => y.title.localeCompare(x.title));
+      renderProducts();
       break;
     case "cena rosnąco":
       CURRENT_PRODUCTS_LIST.sort(
         (x, y) => parseInt(x.price) - parseInt(y.price)
       );
+      renderProducts();
       break;
     case "cena malejąco":
       CURRENT_PRODUCTS_LIST.sort(
         (x, y) => parseInt(y.price) - parseInt(x.price)
       );
+      renderProducts();
       break;
     default:
       CURRENT_PRODUCTS_LIST.sort((x, y) => x.title.localeCompare(y.title));
+      renderProducts();
   }
 }
 
@@ -307,7 +309,7 @@ function handleSearch(e) {
   } else {
     renderErrorMessage("emptyError");
   }
-
+  sortCurrentList();
   renderProducts();
 }
 
