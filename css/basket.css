@@ -94,6 +94,9 @@
   display: flex;
   align-items: center;
 }
+.basket__mobile-icon {
+  max-width: 48px;
+}
 
 @media (min-width: 1024px) {
   .basket {

@@ -26,6 +26,8 @@ function renderApp(productsList) {
   PRODUCTS_LIST = productsList;
   CURRENT_PRODUCTS_LIST = [...productsList];
 
+  sortCurrentList();
+
   renderProducts();
   renderBasket();
 
@@ -101,11 +103,7 @@ function renderBasket() {
 function handleBasketState() {
   const basketElement = document.querySelector(".basket");
 
-  if (BASKET.length) {
-    basketElement.classList.remove("basket--empty");
-  } else {
-    basketElement.classList.add("basket--empty");
-  }
+  basketElement.classList.toggle("basket--empty", !BASKET.length);
 }
 
 // Render summary price of all products in basket
@@ -268,27 +266,26 @@ function removeFromBasket(e) {
 function sortCurrentList() {
   const sorterElement = document.querySelector(".sort__array");
   const sorterValue = sorterElement.options[sorterElement.selectedIndex].value;
+
   switch (sorterValue) {
     case "z-a":
       CURRENT_PRODUCTS_LIST.sort((x, y) => y.title.localeCompare(x.title));
-      renderProducts();
       break;
     case "cena rosnąco":
       CURRENT_PRODUCTS_LIST.sort(
         (x, y) => parseInt(x.price) - parseInt(y.price)
       );
-      renderProducts();
       break;
     case "cena malejąco":
       CURRENT_PRODUCTS_LIST.sort(
         (x, y) => parseInt(y.price) - parseInt(x.price)
       );
-      renderProducts();
       break;
     default:
       CURRENT_PRODUCTS_LIST.sort((x, y) => x.title.localeCompare(y.title));
-      renderProducts();
   }
+
+  renderProducts();
 }
 
 // Ingredients search
