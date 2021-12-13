@@ -94,7 +94,7 @@
   display: flex;
   align-items: center;
 }
-.basket__mobile-icon {
+.basket__mobile-icon img {
   max-width: 48px;
 }
 
